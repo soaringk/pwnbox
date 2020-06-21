@@ -31,12 +31,12 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 RUN pip3 install -U --no-cache-dir pip \
     && pip2 install -U --no-cache-dir pip \
     #
-    && git clone https://github.com/pwndbg/pwndbg.git /opt/pwndbg \
-    && cd /opt/pwndbg && ./setup.sh \
-    && wget -O /opt/gef.py https://github.com/hugsy/gef/raw/master/gef.py \
-    && echo "# source /opt/gef.py" >> ~/.gdbinit \
+    && git clone https://github.com/pwndbg/pwndbg.git /usr/local/pwndbg \
+    && cd /usr/local/pwndbg && ./setup.sh \
+    && wget -O /usr/local/gef.py https://github.com/hugsy/gef/raw/master/gef.py \
+    && echo "# source /usr/local/gef.py" >> ~/.gdbinit \
     # split view of pwndbg
-    && git clone https://github.com/jerdna-regeiz/splitmind /opt/splitmind \
+    && git clone https://github.com/jerdna-regeiz/splitmind /usr/local/splitmind \
     # pwntools
     && python2 -m pip install -U --no-cache-dir pwntools \
     && python3 -m pip install -U --no-cache-dir pwntools \
@@ -45,15 +45,15 @@ RUN pip3 install -U --no-cache-dir pip \
     && python2 -m pip install -U --no-cache-dir ropgadget ancypatch swpwn r2pipe \
     && gem install one_gadget seccomp-tools \
     # other python panckages
-    && python3 -m pip install -U --no-cache-dir pylint ipython yapf impacket \
-    && python2 -m pip install -U --no-cache-dir pylint ipython yapf impacket \
+    && python3 -m pip install -U --no-cache-dir pylint ipython yapf impacket z3-solver \
+    && python2 -m pip install -U --no-cache-dir pylint ipython yapf impacket z3-solver \
     # patchelf
-    && git clone https://github.com/NixOS/patchelf.git /opt/patchelf \
-    && cd /opt/patchelf && ./bootstrap.sh && ./configure \
+    && git clone https://github.com/NixOS/patchelf.git /usr/local/patchelf \
+    && cd /usr/local/patchelf && ./bootstrap.sh && ./configure \
     && make && make install \
     # reversing tools
-    && git clone https://github.com/radareorg/radare2.git /opt/radare2 \
-    && cd /opt/radare2 && ./sys/install.sh \
+    && git clone https://github.com/radareorg/radare2.git /usr/local/radare2 \
+    && cd /usr/local/radare2 && ./sys/install.sh \
     #
     # clean up
     && apt-get autoremove -y && apt-get clean -y \

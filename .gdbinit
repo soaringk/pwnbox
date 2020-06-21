@@ -1,9 +1,11 @@
+# set follow-fork-mode child
+# set detach-on-fork off
+
 source /opt/pwndbg/gdbinit.py
 # source /opt/gef.py
 
 source /opt/splitmind/gdbinit.py
 set context-clear-screen on
-set follow-fork-mode parent
 python
 import splitmind
 (splitmind.Mind()

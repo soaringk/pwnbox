@@ -28,26 +28,26 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     ; rm -rf /var/tmp/*
 
 # various tools for pwn
-RUN git clone https://github.com/pwndbg/pwndbg.git /opt/pwndbg \
-    && cd /opt/pwndbg && ./setup.sh \
-    && wget -O /opt/gef.py https://github.com/hugsy/gef/raw/master/gef.py \
-    && echo "# source /opt/gef.py" >> ~/.gdbinit \
+RUN git clone https://github.com/pwndbg/pwndbg.git /usr/local/pwndbg \
+    && cd /usr/local/pwndbg && ./setup.sh \
+    && wget -O /usr/local/gef.py https://github.com/hugsy/gef/raw/master/gef.py \
+    && echo "# source /usr/local/gef.py" >> ~/.gdbinit \
     # split view of pwndbg
-    && git clone https://github.com/jerdna-regeiz/splitmind /opt/splitmind \
+    && git clone https://github.com/jerdna-regeiz/splitmind /usr/local/splitmind \
     # pwntools
     && pip3 install -U --no-cache-dir pwntools \
     # python/ruby packages & gdb-plugin
     && pip3 install -U --no-cache-dir ropgadget ancypatch swpwn r2pipe \
     && gem install one_gadget seccomp-tools \
     # other python packages
-    && pip3 install -U --no-cache-dir pylint ipython yapf impacket \
+    && pip3 install -U --no-cache-dir pylint ipython yapf impacket z3-solver \
     # patchelf
-    && git clone https://github.com/NixOS/patchelf.git /opt/patchelf \
-    && cd /opt/patchelf && ./bootstrap.sh && ./configure \
+    && git clone https://github.com/NixOS/patchelf.git /usr/local/patchelf \
+    && cd /usr/local/patchelf && ./bootstrap.sh && ./configure \
     && make && make install \
     # reversing tools
-    && git clone https://github.com/radareorg/radare2.git /opt/radare2 \
-    && cd /opt/radare2 && ./sys/install.sh \
+    && git clone https://github.com/radareorg/radare2.git /usr/local/radare2 \
+    && cd /usr/local/radare2 && ./sys/install.sh \
     #
     # clean up
     && apt-get autoremove -y --purge && apt-get autoclean -y \
