@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:focal
 
 # install necessary packages
 RUN export DEBIAN_FRONTEND=noninteractive \

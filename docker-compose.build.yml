@@ -1,0 +1,19 @@
+version: "3"
+services:
+  pwnbox.20:
+    build:
+      context: .
+      dockerfile: Dockerfile.20
+    image: pwnbox:20.04
+
+  pwnbox.18:
+    build:
+      context: .
+      dockerfile: Dockerfile.18
+    image: pwnbox:18.04
+
+  pwnbox.16:
+    build:
+      context: .
+      dockerfile: Dockerfile.16
+    image: pwnbox:16.04
