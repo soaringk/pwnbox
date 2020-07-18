@@ -39,7 +39,8 @@ zstyle ':prezto:load' pmodule \
   'syntax-highlighting' \
   'history-substring-search' \
   'autosuggestions' \
-  'git'
+  'git' \
+  'dpkg'
 
 #
 # Autosuggestions
