@@ -8,14 +8,13 @@
 
 # Including
 
-* debugging:` gdb`, `pwndbg`, `pwntools`, `radare2`, `patchelf`, etc. 
-* network: `netcat`, `openvpn`, `nmap`, etc.
+* debugging: `gdb`, `pwndbg`, `pwntools`, `radare2`, `patchelf`, common compiling/sys_call packages, etc. 
 
-Switched default shell to `zsh`, using [prezto](https://github.com/sorin-ionescu/prezto)
+* Switched default shell to `zsh`, using [prezto](https://github.com/sorin-ionescu/prezto)
 
-glibc and targets are stored at host machine and mounted on demand (thanks to [glibc-all-in-one](https://github.com/matrix1001/glibc-all-in-one)).
+* glibc and targets are stored at host machine and mounted on demand (thanks to [glibc-all-in-one](https://github.com/matrix1001/glibc-all-in-one)).
 
-[Libc symbol searcher](https://github.com/soaringk/LibcSearcher) can be sometimes useful, but not built into the image due to size concerns.
+* [Libc symbol searcher](https://github.com/soaringk/LibcSearcher) can be sometimes useful, but not built into the image due to size concerns.
 
 # Running
 
