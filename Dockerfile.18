@@ -16,7 +16,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     libssl-dev libffi-dev \
     ruby ruby-dev \
     # various tools
-    wget curl netcat iproute2 zsh vim tmux git ack \
+    wget curl netcat iproute2 net-tools zsh vim tmux git ack \
     #
     # untar glibc source code
     && cd /usr/src/glibc/ && tar xf glibc-2.27.tar.xz && rm -rf glibc-2.27.tar.xz \
@@ -32,13 +32,16 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 RUN python3 -m pip install -U --no-cache-dir pip \
     && python2 -m pip install -U --no-cache-dir pip \
     # pwndbg & gef
-    && git clone https://github.com/pwndbg/pwndbg.git /usr/local/pwndbg \
-    && cd /usr/local/pwndbg && ./setup.sh \
-    && curl -fLo /usr/local/gef.py https://tinyurl.com/gef-master \
-    && echo "# source /usr/local/gef.py" >> ~/.gdbinit \
+    && git clone https://github.com/pwndbg/pwndbg.git /opt/pwndbg \
+    && cd /opt/pwndbg && ./setup.sh \
+    && curl -fLo /opt/gef.py https://tinyurl.com/gef-master \
+    && echo "# source /opt/gef.py" >> ~/.gdbinit \
     # split view of pwndbg
-    && git clone https://github.com/jerdna-regeiz/splitmind /usr/local/splitmind \
+    && git clone https://github.com/jerdna-regeiz/splitmind /opt/splitmind \
     # pwntools, etc.
+    # remove duplicate unicorn==1.0.1
+    && python3 -m pip uninstall -y unicorn \
+    && python2 -m pip uninstall -y unicorn \
     && python3 -m pip install -U --no-cache-dir pwntools ropgadget \
     && python2 -m pip install -U --no-cache-dir pwntools ropgadget \
     && gem install one_gadget seccomp-tools \
@@ -46,12 +49,12 @@ RUN python3 -m pip install -U --no-cache-dir pip \
     && python3 -m pip install -U --no-cache-dir pylint ipython yapf \
     && python2 -m pip install -U --no-cache-dir pylint ipython yapf \
     # patchelf
-    && git clone https://github.com/NixOS/patchelf.git /usr/local/patchelf \
-    && cd /usr/local/patchelf && ./bootstrap.sh && ./configure \
+    && git clone https://github.com/NixOS/patchelf.git /opt/patchelf \
+    && cd /opt/patchelf && ./bootstrap.sh && ./configure \
     && make && make install \
     # reversing tools
-    && git clone https://github.com/radareorg/radare2.git /usr/local/radare2 \
-    && cd /usr/local/radare2 && ./sys/install.sh \
+    && git clone https://github.com/radareorg/radare2.git /opt/radare2 \
+    && cd /opt/radare2 && ./sys/install.sh \
     #
     # clean up
     && apt-get autoremove -y && apt-get clean -y \
