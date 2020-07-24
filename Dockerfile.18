@@ -21,15 +21,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     # untar glibc source code
     && cd /usr/src/glibc/ && tar xf glibc-2.27.tar.xz && rm -rf glibc-2.27.tar.xz \
     #
-    # clean up
-    && apt-get autoremove -y && apt-get clean -y \
-    ; rm -rf ~/.cache \
-    ; rm -rf /var/lib/apt/lists/* \
-    ; rm -rf /tmp/* \
-    ; rm -rf /var/tmp/*
-
-# various tools for pwn
-RUN python3 -m pip install -U --no-cache-dir pip \
+    # various tools for pwn
+    && python3 -m pip install -U --no-cache-dir pip \
     && python2 -m pip install -U --no-cache-dir pip \
     # pwndbg & gef
     && git clone https://github.com/pwndbg/pwndbg.git /opt/pwndbg \
@@ -51,25 +44,25 @@ RUN python3 -m pip install -U --no-cache-dir pip \
     # patchelf
     && git clone https://github.com/NixOS/patchelf.git /opt/patchelf \
     && cd /opt/patchelf && ./bootstrap.sh && ./configure \
-    && make && make install \
+    && make >/dev/null || make \
+    && make install \
     # reversing tools
     && git clone https://github.com/radareorg/radare2.git /opt/radare2 \
-    && cd /opt/radare2 && ./sys/install.sh \
-    #
+    && cd /opt/radare2 \
+    && ./sys/install.sh >/dev/null || ./sys/install.sh \
+    # prezto
+    && git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto" \
+    && chsh -s /bin/zsh \
     # clean up
-    && apt-get autoremove -y && apt-get clean -y \
+    && apt-get autoremove -y --purge && apt-get autoclean -y \
     ; rm -rf ~/.cache \
     ; rm -rf /var/lib/apt/lists/* \
     ; rm -rf /tmp/* \
     ; rm -rf /var/tmp/*
 
-# prezto
-RUN git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto" \
-    && chsh -s /bin/zsh
+RUN ["/bin/zsh", "-c", "setopt EXTENDED_GLOB; for rcfile in ${ZDOTDIR:-$HOME}/.zprezto/runcoms/^README.md(.N); do ln -s $rcfile ${ZDOTDIR:-$HOME}/.${rcfile:t}; done"]
 COPY .tmux.conf .p10k.zsh .gdbinit /root/
 COPY zprezto/ /root/.zprezto/runcoms/
-RUN ["/bin/zsh", "-c", "setopt EXTENDED_GLOB; for rcfile in ${ZDOTDIR:-$HOME}/.zprezto/runcoms/^README.md(.N); do ln -s $rcfile ${ZDOTDIR:-$HOME}/.${rcfile:t}; done"]
-
 
 ENV LANG C.UTF-8
 CMD ["zsh"]
