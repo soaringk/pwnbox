@@ -16,14 +16,14 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     libssl-dev libffi-dev \
     ruby ruby-dev \
     # various tools
-    wget curl netcat iproute2 net-tools zsh vim tmux git ack \
+    wget curl netcat iproute2 net-tools zsh vim tmux git ack > /dev/null \
     #
     # untar glibc source code
     && cd /usr/src/glibc/ && tar xf glibc-2.27.tar.xz && rm -rf glibc-2.27.tar.xz \
     #
     # various tools for pwn
-    && python3 -m pip install -U --no-cache-dir pip \
-    && python2 -m pip install -U --no-cache-dir pip \
+    && python3 -m pip install -q -U --no-cache-dir pip \
+    && python2 -m pip install -q -U --no-cache-dir pip \
     # pwndbg & gef
     && git clone https://github.com/pwndbg/pwndbg.git /opt/pwndbg \
     && cd /opt/pwndbg && ./setup.sh \
@@ -35,21 +35,21 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     # remove duplicate unicorn==1.0.1
     && python3 -m pip uninstall -y unicorn \
     && python2 -m pip uninstall -y unicorn \
-    && python3 -m pip install -U --no-cache-dir pwntools ropgadget \
-    && python2 -m pip install -U --no-cache-dir pwntools ropgadget \
+    && python3 -m pip install -q -U --no-cache-dir pwntools ropgadget \
+    && python2 -m pip install -q -U --no-cache-dir pwntools ropgadget \
     && gem install one_gadget seccomp-tools \
     # other python panckages
-    && python3 -m pip install -U --no-cache-dir pylint ipython yapf \
-    && python2 -m pip install -U --no-cache-dir pylint ipython yapf \
+    && python3 -m pip install -q -U --no-cache-dir pylint ipython yapf \
+    && python2 -m pip install -q -U --no-cache-dir pylint ipython yapf \
     # patchelf
     && git clone https://github.com/NixOS/patchelf.git /opt/patchelf \
     && cd /opt/patchelf && ./bootstrap.sh && ./configure \
-    && make >/dev/null || make \
+    && make > /dev/null || make \
     && make install \
     # reversing tools
     && git clone https://github.com/radareorg/radare2.git /opt/radare2 \
     && cd /opt/radare2 \
-    && ./sys/install.sh >/dev/null || ./sys/install.sh \
+    && ./sys/install.sh > /dev/null || ./sys/install.sh \
     # prezto
     && git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto" \
     && chsh -s /bin/zsh \
