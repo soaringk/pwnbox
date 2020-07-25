@@ -37,7 +37,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && python2 -m pip uninstall -y unicorn \
     && python3 -m pip install -U --no-cache-dir pwntools ropgadget \
     && python2 -m pip install -U --no-cache-dir pwntools ropgadget \
-    && gem install one_gadget seccomp-tools \
+    && gem install one_gadget \
     # other python panckages
     && python3 -m pip install -U --no-cache-dir pylint ipython yapf \
     && python2 -m pip install -U --no-cache-dir pylint ipython yapf \
