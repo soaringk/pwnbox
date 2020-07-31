@@ -10,13 +10,19 @@ all based on Ubuntu LTS image.
 
 # Including
 
-* debugging: `gdb`, `pwndbg`, `pwntools`, `radare2`, `patchelf`, commonly used compiling, sys_call packages, etc.
+* debugging: `gdb`, `pwndbg`, `pwntools`, `radare2`, `patchelf`, some library/sys_call packages, etc.
 
 * Switched default shell to `zsh`, using [prezto](https://github.com/sorin-ionescu/prezto)
 
 * Different versions of glibc are saved at the host machine and mounted on demand (thanks to [glibc-all-in-one](https://github.com/matrix1001/glibc-all-in-one)).
 
 * [Libc symbol searcher](https://github.com/soaringk/LibcSearcher) can be (sometimes) useful, but not built into the image due to storage concerns.
+
+# Building
+
+```
+docker-compose -f docker-compose.build.yml build
+```
 
 # Running example
 
@@ -50,9 +56,9 @@ services:
     tty: true
 ```
 
-NOTE: Run `docker-compose run ctf` to enter an interactive shell.
+Run `docker-compose run ctf` to enter an interactive shell.
 
-Use `--privilege` flag if you need to edit `/proc`.
+NOTE: Use `--privilege` flag if you need to edit `/proc`.
 
 ## VS Code Integration
 
