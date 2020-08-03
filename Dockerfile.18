@@ -16,7 +16,9 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     libssl-dev libffi-dev \
     ruby ruby-dev \
     # various tools
-    wget curl netcat iproute2 net-tools zsh vim tmux git ack > /dev/null \
+    wget curl netcat iproute2 net-tools zsh vim tmux git ack tree > /dev/null \
+    && curl -fLo /opt/fd_8.1.1_amd64.deb https://github.com/sharkdp/fd/releases/download/v8.1.1/fd_8.1.1_amd64.deb \
+    && dpkg -i /opt/fd_8.1.1_amd64.deb \
     #
     # untar glibc source code
     && cd /usr/src/glibc/ && tar xf glibc-2.27.tar.xz && rm -rf glibc-2.27.tar.xz \

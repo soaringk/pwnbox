@@ -15,7 +15,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     libssl-dev libffi-dev \
     ruby ruby-dev \
     # various tools
-    wget curl netcat iproute2 net-tools zsh vim tmux git ack > /dev/null \
+    wget curl netcat iproute2 net-tools zsh vim tmux git ack tree fd-find > /dev/null \
     #
     # untar glibc source code
     && cd /usr/src/glibc/ && tar xf glibc-2.31.tar.xz && rm -rf glibc-2.31.tar.xz \
@@ -55,7 +55,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     ; rm -rf /tmp/* \
     ; rm -rf /var/tmp/*
 
-RUN ["/bin/zsh", "-c", "setopt EXTENDED_GLOB; for rcfile in ${ZDOTDIR:-$HOME}/.zprezto/runcoms/^README.md(.N); do ln -s $rcfile ${ZDOTDIR:-$HOME}/.${rcfile:t}; done"]
+RUN ["/bin/zsh", "-c", "setopt EXTENDED_GLOB; for rcfile in ${ZDOTDIR:-$HOME}/.zprezto/runcoms/^README.md(.N); do ln -s $rcfile ${ZDOTDIR:-$HOME}/.${rcfile:t}; done; echo \"alias fd=fdfind\" >> ${ZDOTDIR:-$HOME}/.zshrc"]
 COPY .tmux.conf .p10k.zsh .gdbinit /root/
 COPY zprezto/ /root/.zprezto/runcoms/
 
