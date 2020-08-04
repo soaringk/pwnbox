@@ -1,0 +1,17 @@
+ARG RUNTIME
+FROM pwnbox:${RUNTIME}
+
+RUN git clone https://github.com/soaringk/LibcSearcher.git /opt/LibcSearcher \
+    && cd /opt/LibcSearcher \
+    && python3 setup.py develop && python setup.py develop \
+    && git clone https://github.com/soaringk/I_Vim.git ~/.vim_runtime \
+    && ln -s ~/.vim_runtime/vimrc ~/.vimrc \
+    && vim +PlugInstall +qall > /dev/null \
+    && cd ~/.vim_runtime/plugged/youcompleteme \
+    && python3 install.py --clangd-completer \
+    && echo 'y\ny' | unminimize \
+    && apt-get autoremove -y --purge && apt-get autoclean -y \
+    ; rm -rf ~/.cache \
+    ; rm -rf /var/lib/apt/lists/* \
+    ; rm -rf /tmp/* \
+    ; rm -rf /var/tmp/*

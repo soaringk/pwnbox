@@ -69,3 +69,9 @@ You might want to `docker commit <container_name> pwnbox:vscode` after setting u
 # About Images
 
 Usually `18.04`/`20.04` is used, but `16.04`  is reserved just in case ;)
+
+# New Toy (vscode `.devcontainer.json`)
+
+[Developing inside a Container](https://code.visualstudio.com/docs/remote/containers) with vscode. Useful at team work and deploying services.
+
+Though unnecessary here since there is no deployment and no team work for pwnbox :)
