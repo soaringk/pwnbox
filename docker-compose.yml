@@ -1,7 +1,32 @@
 version: "3"
 services:
+  basebox.20:
+    build:
+      context: .
+      dockerfile: Dockerfile.20
+    image: pwnbox:base.20
+
+  basebox.18:
+    build:
+      context: .
+      dockerfile: Dockerfile.18
+    image: pwnbox:base.18
+
+  basebox.16:
+    build:
+      context: .
+      dockerfile: Dockerfile.16
+    image: pwnbox:base.16
+
   ctf:
-    image: pwnbox:18.vscode
+    build:
+      context: .
+      args:
+        BASE: base.${PWNBOX_BASE}
+      dockerfile: Dockerfile.run
+    image: pwnbox:${PWNBOX_BASE}.runtime
+    depends_on:
+      - basebox.${PWNBOX_BASE}
     cap_drop:
       - SYS_PTRACE
       # - NET_ADMIN

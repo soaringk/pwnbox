@@ -1,62 +1,57 @@
-# Tags and respective Dockerfile
+# Intro
 
-[20.04](https://github.com/soaringk/pwnbox/blob/master/Dockerfile.20)
+[20.04](https://github.com/soaringk/pwnbox/blob/master/Dockerfile.20), [18.04](https://github.com/soaringk/pwnbox/blob/master/Dockerfile.18), [16.04](https://github.com/soaringk/pwnbox/blob/master/Dockerfile.16) are used as the `base image`, which will be then extended by [Dockerfile.run](https://github.com/soaringk/pwnbox/blob/master/Dockerfile.run).
 
-[18.04](https://github.com/soaringk/pwnbox/blob/master/Dockerfile.18)
+All using Ubuntu LTS image.
 
-[16.04](https://github.com/soaringk/pwnbox/blob/master/Dockerfile.16)
+## Explained
 
-all based on Ubuntu LTS image.
+* Commonly-used tools were bundle into the base image, such as, `gdb`, `pwndbg`/`gef`, `pwntools`.
 
-# Including
-
-* debugging: `gdb`, `pwndbg`, `pwntools`, `radare2`, `patchelf`, some library/sys_call packages, etc.
-
-* Switched default shell to `zsh`, using [prezto](https://github.com/sorin-ionescu/prezto)
+* More personalized setup is placed at [Dockerfile.run](https://github.com/soaringk/pwnbox/blob/master/Dockerfile.run), in which I
+  * installed some tools in my favor.
+  * Switched default shell to `zsh`, using [prezto](https://github.com/sorin-ionescu/prezto).
+  * Installed [Libc symbol searcher](https://github.com/soaringk/LibcSearcher).
+  * installed personal vim configurations.
 
 * Different versions of glibc are saved at the host machine and mounted on demand (thanks to [glibc-all-in-one](https://github.com/matrix1001/glibc-all-in-one)).
 
-* [Libc symbol searcher](https://github.com/soaringk/LibcSearcher) can be (sometimes) useful, but not built into the image due to storage concerns.
-
-# Building
+# Building and Running
 
 ```
-docker-compose -f docker-compose.build.yml build
+PWNBOX_BASE=20 docker-compose run ctf
+```
+This command will build the base image (in this case, `pwnbox:20.04`) and then build the extended runtime image, if you don't have them, and give you the interactive shell.
+
+**NOTE**: You should always include `PWNBOX` variable if you want to use `docker-compose` to start up your service.
+
+Maybe export it in the shell profile?
+```
+echo "export PWNBOX_BASE=18" >> ~/.zshrc
 ```
 
-# Running example
+## More...
 
-```
-docker run -it \
---cap-add SYS_PTRACE \
---security-opt seccomp=unconfined \
--v <foo>/glibc-all-in-one/libs:/opt/glibc:ro \
--v <foo>/pwn:/pwn \
---name ctf \
-pwnbox:18.04
-```
+* Build all services
+  ```
+  PWNBOX_BASE=20 docker-compose build
+  ```
 
-or using docker-compose.yml:
+* Build specific service
+  ```
+  docker-compose build basebox.18
+  ```
 
-```
-version: "3"
-services:
-  ctf:
-    image: pwnbox:18.04
-    cap_drop:
-      - SYS_PTRACE
-      # - NET_ADMIN
-    security_opt:
-      - seccomp:unconfined
-    volumes:
-      -  <foo>/glibc-all-in-one/libs:/opt/glibc:ro
-      -  <foo>/pwn:/pwn
-    network_mode: bridge
-    stdin_open: true
-    tty: true
-```
-
-Run `docker-compose run ctf` to enter an interactive shell.
+* without `docker-compose`
+  ```
+  docker run -it \
+  --cap-add SYS_PTRACE \
+  --security-opt seccomp=unconfined \
+  -v <foo>/glibc-all-in-one/libs:/opt/glibc:ro \
+  -v <foo>/pwn:/pwn \
+  --name ctf \
+  pwnbox:18.04
+  ```
 
 NOTE: Use `--privilege` flag if you need to edit `/proc`.
 
@@ -64,14 +59,11 @@ NOTE: Use `--privilege` flag if you need to edit `/proc`.
 
 If you want this setting to work with VSCode. Check 👉 [Remote-Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
 
-You might want to `docker commit <container_name> pwnbox:vscode` after setting up everything. It can save you some time.
+1. You might want to `docker commit <container_name> pwnbox:vscode` after setting up everything. It can save you some time.
+2. Or you can use the `.devcontainer.json`. Reference 👉 [Developing inside a Container](https://code.visualstudio.com/docs/remote/containers).
+   Unnecessary though, since there is no deployment and no team work here :)
+
 
 # About Images
 
-Usually `18.04`/`20.04` is used, but `16.04`  is reserved just in case ;)
-
-# New Toy (vscode `.devcontainer.json`)
-
-[Developing inside a Container](https://code.visualstudio.com/docs/remote/containers) with vscode. Useful at team work and deploying services.
-
-Though unnecessary here since there is no deployment and no team work for pwnbox :)
+Usually `18.04`/`20.04` is used, but `16.04`  is reserved just in case.

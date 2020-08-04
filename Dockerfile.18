@@ -11,19 +11,15 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     gdb gdb-multiarch gdbserver glibc-source strace ltrace \
     libc6-dbg libc6-dbg:i386 libc6-dev libc6-dev:i386 \
     # python and related header
-    python python-dev python-pip python-setuptools \
-    python3 python3-dev python3-pip python3-setuptools \
+    python python-dev python-pip python-setuptools python-wheel \
+    python3 python3-dev python3-pip python3-setuptools python3-wheel \
     libssl-dev libffi-dev \
     ruby ruby-dev \
-    # various tools
-    wget curl netcat iproute2 net-tools zsh vim tmux git ack tree > /dev/null \
-    && curl -fLo /opt/fd_8.1.1_amd64.deb https://github.com/sharkdp/fd/releases/download/v8.1.1/fd_8.1.1_amd64.deb \
-    && dpkg -i /opt/fd_8.1.1_amd64.deb \
-    #
+    # other tools
+    wget curl netcat iproute2 net-tools vim git > /dev/null \
     # untar glibc source code
     && cd /usr/src/glibc/ && tar xf glibc-2.27.tar.xz && rm -rf glibc-2.27.tar.xz \
     #
-    # various tools for pwn
     && python3 -m pip install -q -U --no-cache-dir pip \
     && python2 -m pip install -q -U --no-cache-dir pip \
     # pwndbg & gef
@@ -31,30 +27,13 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && cd /opt/pwndbg && ./setup.sh \
     && curl -fLo /opt/gef.py https://tinyurl.com/gef-master \
     && echo "# source /opt/gef.py" >> ~/.gdbinit \
-    # split view of pwndbg
-    && git clone https://github.com/jerdna-regeiz/splitmind /opt/splitmind \
-    # pwntools, etc.
+    # pwntools, ropgadget
     # remove duplicate unicorn==1.0.1
     && python3 -m pip uninstall -y unicorn \
     && python2 -m pip uninstall -y unicorn \
     && python3 -m pip install -q -U --no-cache-dir pwntools ropgadget \
     && python2 -m pip install -q -U --no-cache-dir pwntools ropgadget \
     && gem install one_gadget seccomp-tools \
-    # other python panckages
-    && python3 -m pip install -q -U --no-cache-dir pylint ipython yapf \
-    && python2 -m pip install -q -U --no-cache-dir pylint ipython yapf \
-    # patchelf
-    && git clone https://github.com/NixOS/patchelf.git /opt/patchelf \
-    && cd /opt/patchelf && ./bootstrap.sh && ./configure \
-    && make > /dev/null || make \
-    && make install \
-    # reversing tools
-    && git clone https://github.com/radareorg/radare2.git /opt/radare2 \
-    && cd /opt/radare2 \
-    && ./sys/install.sh > /dev/null || ./sys/install.sh \
-    # prezto
-    && git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto" \
-    && chsh -s /bin/zsh \
     # clean up
     && apt-get autoremove -y --purge && apt-get autoclean -y \
     ; rm -rf ~/.cache \
@@ -62,9 +41,4 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     ; rm -rf /tmp/* \
     ; rm -rf /var/tmp/*
 
-RUN ["/bin/zsh", "-c", "setopt EXTENDED_GLOB; for rcfile in ${ZDOTDIR:-$HOME}/.zprezto/runcoms/^README.md(.N); do ln -s $rcfile ${ZDOTDIR:-$HOME}/.${rcfile:t}; done"]
-COPY .tmux.conf .p10k.zsh .gdbinit /root/
-COPY zprezto/ /root/.zprezto/runcoms/
-
 ENV LANG C.UTF-8
-CMD ["zsh"]
