@@ -4,7 +4,7 @@ FROM pwnbox:${BASE}
 RUN echo 'y\ny' | unminimize \
     # Ubuntu xenial has no `unminimize`
     ; export DEBIAN_FRONTEND=noninteractive \
-    && apt-get update && apt-get install -qq ack-grep tree zsh tmux man manpages-posix less \
+    && apt-get update && apt-get install -qq ack-grep tree zsh tmux man manpages-posix less netcat \
     && curl -fLo /opt/fd_8.1.1_amd64.deb https://github.com/sharkdp/fd/releases/download/v8.1.1/fd_8.1.1_amd64.deb \
     && dpkg -i /opt/fd_8.1.1_amd64.deb && rm -rf /opt/fd_8.1.1_amd64.deb \
     # radare2

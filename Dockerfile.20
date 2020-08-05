@@ -16,7 +16,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     libssl-dev libffi-dev \
     ruby ruby-dev \
     # other tools
-    wget curl netcat iproute2 net-tools vim git > /dev/null \
+    wget curl vim git > /dev/null \
     # untar glibc source code
     && cd /usr/src/glibc/ && tar xf glibc-2.31.tar.xz && rm -rf glibc-2.31.tar.xz \
     #
