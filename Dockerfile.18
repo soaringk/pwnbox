@@ -31,8 +31,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     # remove duplicate unicorn==1.0.1
     && python3 -m pip uninstall -y unicorn \
     && python2 -m pip uninstall -y unicorn \
-    && python3 -m pip install -q -U --no-cache-dir pwntools ropgadget \
-    && python2 -m pip install -q -U --no-cache-dir pwntools ropgadget \
+    && python3 -m pip install -U --no-cache-dir pwntools ropgadget \
+    && python2 -m pip install -U --no-cache-dir pwntools ropgadget \
     && gem install one_gadget seccomp-tools \
     # clean up
     && apt-get autoremove -y --purge && apt-get autoclean -y \

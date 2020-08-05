@@ -6,7 +6,7 @@ All using Ubuntu LTS image.
 
 ## Explained
 
-* Commonly-used tools were bundle into the base image, such as, `gdb`, `pwndbg`/`gef`, `pwntools`.
+* Commonly-used packages were bundled into the base image, such as, `gdb`, `pwndbg`/`gef`, `pwntools`.
 
 * More personalized setup is placed at [Dockerfile.run](https://github.com/soaringk/pwnbox/blob/master/Dockerfile.run), in which I
   * installed some tools in my favor.
