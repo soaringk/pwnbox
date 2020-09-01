@@ -27,7 +27,24 @@ services:
     image: pwnbox:${PWNBOX_BASE}.runtime
     depends_on:
       - basebox.${PWNBOX_BASE}
-    cap_drop:
+    cap_add:
+      - SYS_MODULE
+      - SYS_PTRACE
+      # - NET_ADMIN
+    security_opt:
+      - seccomp:unconfined
+    volumes:
+      - ~/Workspace/glibc-all-in-one/libs:/opt/glibc:ro
+      - ~/Desktop/CTF/pwn:/pwn
+      - ~/Workspace/ctf-challenges/pwn:/ctf-challenges
+    network_mode: bridge
+    stdin_open: true
+    tty: true
+
+  vscode:
+    image: pwnbox:${PWNBOX_BASE}.vscode
+    cap_add:
+      - SYS_MODULE
       - SYS_PTRACE
       # - NET_ADMIN
     security_opt:
