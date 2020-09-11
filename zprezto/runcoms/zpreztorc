@@ -40,7 +40,8 @@ zstyle ':prezto:load' pmodule \
   'history-substring-search' \
   'autosuggestions' \
   'git' \
-  'dpkg'
+  'dpkg' \
+  'fzf'
 
 #
 # Autosuggestions
@@ -227,3 +228,16 @@ zstyle ':prezto:module:prompt' theme 'powerlevel10k'
 # before deleting or overwriting files. Set to 'no' to disable this safer
 # behavior.
 # zstyle ':prezto:module:utility' safe-ops 'yes'
+
+#
+# contrib
+#
+
+# fzf
+zstyle ':prezto:module:fzf' key-bindings 'yes'
+
+zstyle ':prezto:module:fzf' completion 'yes'
+
+zstyle ':prezto:module:fzf' tmux 'yes'
+
+zstyle ':prezto:module:fzf' extra 'yes'

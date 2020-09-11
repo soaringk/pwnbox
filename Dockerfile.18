@@ -1,9 +1,8 @@
 FROM ubuntu:bionic
 
 # install necessary packages
-RUN export DEBIAN_FRONTEND=noninteractive \
-    && dpkg --add-architecture i386 \
-    && apt-get update && apt-get install --no-install-recommends -y \
+RUN dpkg --add-architecture i386 && apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -qq \
     # building tools
     build-essential binutils coreutils cmake gcc gcc-multilib bison flex upx-ucl \
     autoconf automake libtool pax-utils \
@@ -16,7 +15,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     libssl-dev libffi-dev \
     ruby ruby-dev \
     # other tools
-    wget curl vim git > /dev/null \
+    wget curl vim git \
     # untar glibc source code
     && cd /usr/src/glibc/ && tar xf glibc-2.27.tar.xz && rm -rf glibc-2.27.tar.xz \
     #

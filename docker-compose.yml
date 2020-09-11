@@ -24,7 +24,7 @@ services:
       args:
         BASE: base.${PWNBOX_BASE}
       dockerfile: Dockerfile.run
-    image: pwnbox:${PWNBOX_BASE}.runtime
+    image: pwnbox:runtime.${PWNBOX_BASE}
     depends_on:
       - basebox.${PWNBOX_BASE}
     cap_add:
@@ -42,7 +42,7 @@ services:
     tty: true
 
   vscode:
-    image: pwnbox:${PWNBOX_BASE}.vscode
+    image: pwnbox:vscode.${PWNBOX_BASE}
     cap_add:
       - SYS_MODULE
       - SYS_PTRACE
