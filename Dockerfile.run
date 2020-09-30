@@ -28,10 +28,6 @@ RUN echo 'y\ny' | unminimize > /dev/null; apt-get update \
     && cd /tmp/patchelf && ./bootstrap.sh && ./configure \
     && make > /dev/null || make \
     && make install \
-    # LibcSearcher
-    && git clone https://github.com/soaringk/LibcSearcher.git /opt/LibcSearcher \
-    && cd /opt/LibcSearcher \
-    && python3 setup.py develop && python setup.py develop \
     # vim
     && git clone https://github.com/soaringk/I_Vim.git ~/.vim_runtime \
     && ln -s ~/.vim_runtime/vimrc ~/.vimrc \

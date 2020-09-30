@@ -36,7 +36,6 @@ services:
     volumes:
       - ~/Workspace/glibc-all-in-one/libs:/opt/glibc:ro
       - ~/Desktop/CTF/pwn:/pwn
-      - ~/Workspace/ctf-challenges/pwn:/ctf-challenges
     network_mode: bridge
     stdin_open: true
     tty: true
@@ -51,6 +50,7 @@ services:
       - seccomp:unconfined
     volumes:
       - ~/Workspace/glibc-all-in-one/libs:/opt/glibc:ro
+      - ~/Workspace/LibcSearcher:/opt/LibcSearcher
       - ~/Desktop/CTF/pwn:/pwn
       - ~/Workspace/ctf-challenges/pwn:/ctf-challenges
     network_mode: bridge
