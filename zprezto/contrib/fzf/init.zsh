@@ -2,18 +2,19 @@
 # Fuzzy file finder module for prezto
 #
 
-# if exists fzf
+# if not exists fzf
 if (( !$+commands[fzf] )); then
   return 1
 fi
 
+
 if zstyle -t ':prezto:module:fzf' key-bindings; then
-  source ~/.fzf/shell/keybindings.zsh
+  source "$HOME/.fzf/shell/key-bindings.zsh"
   export FZF_DEFAULT_OPTS='--no-height --reverse'
 fi
 
 if zstyle -t ':prezto:module:fzf' completion; then
-  [[ $- == *i* ]] && source ~/.fzf/shell/completion.zsh 2>/dev/null
+  [[ $- == *i* ]] && source "$HOME/.fzf/shell/completion.zsh" 2> /dev/null
 fi
 
 # Set height of fzf results
@@ -36,16 +37,17 @@ __fzf_prog() {
     echo "fzf-tmux -d${FZF_TMUX_HEIGHT}" || echo "fzf"
 }
 
+
 # Use fd or ripgrep or ag if available
 if (( $+commands[rg] )); then
-  export FZF_DEFAULT_COMMAND="rg --files --hidden --follow -g '!{.git,node_modules}' 2> /dev/null"
+  export FZF_DEFAULT_COMMAND="rg --files --hidden -g '!{.git,node_modules,Library}' 2> /dev/null"
   _fzf_compgen_path() {
-    rg --files --hidden --follow -g '!{.git,node_modules}/*' "$1" 2>/dev/null
+    rg --files --hidden -g '!{.git,node_modules,Library}/*' "$1" 2>/dev/null
   }
 elif (( $+commands[fd] )); then
-  export FZF_DEFAULT_COMMAND="fd -HIL -E .git -E node_modules"
+  export FZF_DEFAULT_COMMAND="fd -H -E .git -E node_modules -E Library"
   _fzf_compgen_path() {
-    fd -HIL -E .git -E node_modules "$1"
+    fd -H -E .git -E node_modules "$1"
   }
 elif (( $+commands[ag] )); then
   export FZF_DEFAULT_COMMAND="ag -g ''"
@@ -54,10 +56,11 @@ elif (( $+commands[ag] )); then
   }
 fi
 
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
 
 # Uncomment to use --inline-info option
 # export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --inline-info"
+
 
 # Set colors defined by user
 if zstyle -t ':prezto:module:fzf' colorscheme; then
@@ -68,20 +71,34 @@ if zstyle -t ':prezto:module:fzf' colorscheme; then
   fi
 fi
 
+
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # Use preview window with Ctrl-T
-export FZF_CTRL_T_OPTS="--select-1 --exit-0 --preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
+export FZF_CTRL_T_OPTS="--select-1 --exit-0 --preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -a -I Library -C {}) 2> /dev/null | head -200'"
+
 
 # Full command on preview window
 export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
 
+# Directly executing the command
+fzf-history-widget-accept() {
+  fzf-history-widget
+  zle accept-line
+}
+zle     -N     fzf-history-widget-accept
+bindkey '^X^R' fzf-history-widget-accept
+
+
 # If tree command is installed, show directory contents in preview pane when
 # using ALT-C
 if (( $+commands[tree] )); then
-  export FZF_ALT_C_OPTS="--select-1 --exit-0 --preview 'tree -C {} | head -200'"
+  export FZF_ALT_C_OPTS="--select-1 --exit-0 --preview 'tree -a -I Library -C {} | head -200'"
 fi
+
 
 # load extra fzf function
 if zstyle -t ':prezto:module:fzf' extra; then
-  source "${0:h}/functions/extra.zsh"
-  source "${0:h}/functions/git.zsh"
+  for file in "${0:h}"/functions/*; do
+    source "$file"
+  done
 fi

@@ -2,7 +2,7 @@ FROM ubuntu:xenial
 
 # install necessary packages
 RUN dpkg --add-architecture i386 && apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -qq \
+    && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
     # building tools
     build-essential binutils coreutils cmake gcc gcc-multilib bison flex upx-ucl \
     autoconf automake libtool pax-utils \
@@ -19,10 +19,10 @@ RUN dpkg --add-architecture i386 && apt-get update \
     # untar glibc source code
     && cd /usr/src/glibc/ && tar xf glibc-2.23.tar.xz && rm -rf glibc-2.23.tar.xz \
     #
-    && python3 -m pip install -q -U --no-cache-dir pip \
-    && python2 -m pip install -q -U --no-cache-dir pip \
+    && python3 -m pip install -U --no-cache-dir pip \
+    && python2 -m pip install -U --no-cache-dir pip \
     # pwndbg & gef
-    && git clone https://github.com/pwndbg/pwndbg.git /opt/pwndbg \
+    && git clone --depth 1 https://github.com/pwndbg/pwndbg.git /opt/pwndbg \
     && cd /opt/pwndbg && ./setup.sh \
     && curl -fLo /opt/gef.py https://tinyurl.com/gef-master \
     && echo "# source /opt/gef.py" >> ~/.gdbinit \
@@ -33,6 +33,10 @@ RUN dpkg --add-architecture i386 && apt-get update \
     && python3 -m pip install -U --no-cache-dir pwntools ropgadget \
     && python2 -m pip install -U --no-cache-dir pwntools ropgadget \
     && gem install one_gadget \
+    # radare2
+    && git clone --depth 1 https://github.com/radareorg/radare2.git /tmp/radare2 \
+    && cd /tmp/radare2 && sys/install.sh --install > /dev/null \
+    && rm -rf /tmp/radare2 \
     # clean up
     && apt-get autoremove -y --purge && apt-get autoclean -y \
     && rm -rf ~/.cache /var/lib/apt/lists/* /tmp/* /var/tmp/**
