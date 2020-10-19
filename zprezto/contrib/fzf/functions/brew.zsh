@@ -30,7 +30,7 @@ function bcip() {
   local inst=$(brew search --casks | fzf -m --preview 'brew cask info {}')
 
   if [ $inst ]; then
-    read "input?(i)nstall or open the (h)omepage of $token: "
+    read -q "input?(i)nstall or open the (h)omepage of $(echo $inst | tr '\n' ' '): "
     if [ $input = "i" ] || [ $input = "I" ]; then
       for token in $(echo $inst); do
         brew cask install $token
@@ -55,4 +55,3 @@ function bcxp() {
     done
   fi
 }
-

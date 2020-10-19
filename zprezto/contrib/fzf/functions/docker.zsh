@@ -1,23 +1,33 @@
 # Select a docker container to start, attach, stop or remove
-function dc() {
+function da() {
     local cid
     cid=$(docker ps -a | sed 1d | fzf -m -1 -q "$1" | awk '{print $1}')
 
     if [ -n "$cid" ]; then
-        read "input?(a)ttach, (s)top, (r)emove container\n$cid: "
+        read -q "input?(a)ttach, (s)top, (r)emove container $(echo $cid | tr '\n' ' '): "
         case "$input" in
-            [Aa]* )  
+            [Aa]* )
                 docker start "$cid" && docker attach "$cid"
                 ;;
-            [Ss]* )  
+            [Ss]* )
                 echo $cid | xargs docker stop "$cid"
                 ;;
-            [Rr]* )  
+            [Rr]* )
                 echo $cid | xargs docker stop "$cid" && xargs docker rm "$cid"
                 ;;
             * ) echo "Invalid input!"
                 ;;
         esac
+    fi
+}
+
+# select a docker container to execute
+function de() {
+    local cid
+    cid=$(docker ps | sed 1d | fzf -1 | awk '{print $1}')
+
+    if [ -n "$cid" ]; then
+        print -z "docker exec -it ${cid}" "${@}"
     fi
 }
 
@@ -32,7 +42,7 @@ function drmi() {
 # Select a docker image to run
 function dr() {
   local cid
-  cid=$(docker image ls | sed 1d | fzf -q "$1" | awk '{print $3}')
+  cid=$(docker image ls | sed 1d | fzf -q "$1" | awk '{print $1":"$2}')
 
-  [ -n "$cid" ] && echo $cid && docker run --rm -it "$cid"
+  [ -n "$cid" ] && print -z -- "docker run --rm -it $cid"
 }
