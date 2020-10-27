@@ -2,7 +2,7 @@
 # using "brew search" as source input
 # mnemonic [B]rew [I]nstall [P]lugin
 function bip() {
-  local inst=$(brew search | fzf -m --preview 'brew info {}')
+    local inst=$(brew search | fzf -m -q "$1" --preview 'brew info {}')
 
   if [[ $inst ]]; then
     for token in $(echo $inst); do
@@ -14,7 +14,7 @@ function bip() {
 # Delete (one or multiple) selected application(s)
 # mnemonic [B]rew [C]lean [P]lugin (e.g. uninstall)
 function bxp() {
-  local uninst=$(brew leaves | fzf -m --preview 'brew info {}')
+    local uninst=$(brew leaves | fzf -m -q "$1" --preview 'brew info {}')
 
   if [[ $uninst ]]; then
     for token in $(echo $uninst); do
@@ -27,19 +27,24 @@ function bxp() {
 # using brew cask search as input source
 # and display a info quickview window for the currently marked application
 function bcip() {
-  local inst=$(brew search --casks | fzf -m --preview 'brew cask info {}')
+  local inst=$(brew search --casks | fzf -m -q "$1" --preview 'brew cask info {}')
 
   if [ $inst ]; then
-    read -q "input?(i)nstall or open the (h)omepage of $(echo $inst | tr '\n' ' '): "
-    if [ $input = "i" ] || [ $input = "I" ]; then
-      for token in $(echo $inst); do
-        brew cask install $token
-      done
-    elif [ $input = "h" ] || [ $input = "H" ]; then
-      for token in $(echo $inst); do
-        brew home $token
-      done
-    fi
+    read "input?(i)nstall or open the (h)omepage of $(echo $inst | tr '\n' ' '): "
+    case "$input" in
+      [Ii]* )
+        for token in $(echo $inst); do
+          brew cask install $token
+        done
+        ;;
+      [Hh]* )
+        for token in $(echo $inst); do
+          brew home $token
+        done
+        ;;
+      * ) echo "Invalid input!"
+        ;;
+    esac
   fi
 }
 
@@ -47,7 +52,7 @@ function bcip() {
 # using brew list as input source (all brew cask installed applications)
 # and display a info quickview window for the currently marked application
 function bcxp() {
-  local uninst=$(brew cask list | fzf -m --preview 'brew cask info {}')
+    local uninst=$(brew cask list | fzf -m -q "$1" --preview 'brew cask info {}')
 
   if [ $uninst ]; then
     for token in $(echo $uninst); do

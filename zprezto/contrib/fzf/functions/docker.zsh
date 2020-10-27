@@ -4,7 +4,7 @@ function da() {
     cid=$(docker ps -a | sed 1d | fzf -m -1 -q "$1" | awk '{print $1}')
 
     if [ -n "$cid" ]; then
-        read -q "input?(a)ttach, (s)top, (r)emove container $(echo $cid | tr '\n' ' '): "
+        read "input?(a)ttach, (s)top, (r)emove container $(echo $cid | tr '\n' ' '): "
         case "$input" in
             [Aa]* )
                 docker start "$cid" && docker attach "$cid"
@@ -33,10 +33,11 @@ function de() {
 
 # Select a docker image to remove
 function drmi() {
-  local cid
-  cid=$(docker image ls | sed 1d | fzf -m -q "$1" | awk '{print $1":"$2}')
+  local cid=$(docker image ls | sed 1d | fzf -m -q "$1")
+  local name=$(echo $cid | awk '{print $1":"$2}')
+  local hash_id=$(echo $cid | awk '{print $3}')
 
-  [ -n "$cid" ] && echo $cid | xargs docker rmi
+  [ -n "$cid" ] && echo $name | xargs docker rmi || echo $hash_id | xargs docker rmi
 }
 
 # Select a docker image to run

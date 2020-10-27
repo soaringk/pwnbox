@@ -1,5 +1,5 @@
 ARG PWNBOX_BASE=18
-FROM pwnbox:base.${PWNBOX_BASE}
+FROM kevin2s/pwnbox:base.${PWNBOX_BASE}
 
 RUN echo 'y\ny' | unminimize; apt-get update \
     # Ubuntu xenial has no `unminimize`

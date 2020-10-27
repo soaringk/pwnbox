@@ -22,7 +22,7 @@ services:
     build:
       context: .
       args:
-        BASE: base.${PWNBOX_BASE}
+        PWNBOX_BASE: ${PWNBOX_BASE}
       dockerfile: Dockerfile.run
     image: pwnbox:runtime.${PWNBOX_BASE}
     depends_on:
