@@ -1,0 +1,44 @@
+ARG PWNBOX_BASE=16
+FROM kevin2s/pwnbox:base.${PWNBOX_BASE}
+
+RUN echo 'y\ny' | unminimize; apt-get update \
+    # Ubuntu xenial has no `unminimize`
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    tree zsh tmux man manpages-posix less netcat ccache software-properties-common \
+    # prezto
+    && git clone --depth 1 --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto" \
+    && chsh -s /bin/zsh \
+    # fzf, fd and ripgrep
+    && git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf \
+    && ~/.fzf/install --all \
+    && ln -s /root/.fzf/bin/fzf /usr/local/bin \
+    && ln -s /root/.fzf/bin/fzf-tmux /usr/local/bin \
+    && curl -fLo /tmp/fd_8.1.1_amd64.deb https://github.com/sharkdp/fd/releases/download/v8.1.1/fd_8.1.1_amd64.deb \
+    && dpkg -i /tmp/fd_8.1.1_amd64.deb \
+    && curl -fLo /tmp/ripgrep_12.1.1_amd64.deb https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb \
+    && dpkg -i /tmp/ripgrep_12.1.1_amd64.deb \
+    # other python panckages
+    && python3 -m pip install -U --no-cache-dir pylint ipython yapf rope \
+    && python2 -m pip install -U --no-cache-dir pylint ipython yapf rope \
+    # split view of pwndbg
+    && git clone --depth 1 https://github.com/jerdna-regeiz/splitmind /opt/splitmind \
+    # patchelf
+    && git clone --depth 1 https://github.com/NixOS/patchelf.git /tmp/patchelf \
+    && cd /tmp/patchelf && ./bootstrap.sh && ./configure \
+    && make > /dev/null && make check \
+    && make install \
+    # vim
+    && add-apt-repository ppa:jonathonf/vim \
+    && apt-get update && apt-get install -y vim \
+    && git clone --depth 1 https://github.com/soaringk/I_Vim.git ~/.vim_runtime \
+    && ln -s ~/.vim_runtime/vimrc ~/.vimrc \
+    && vim +PlugInstall +qall \
+    # clean up
+    && apt-get autoremove -y --purge && apt-get autoclean -y \
+    ; rm -rf ~/.zsh* ~/.cache ~/.ccache /var/lib/apt/lists/* /tmp/* /var/tmp/**
+
+RUN ["/bin/zsh", "-c", "setopt EXTENDED_GLOB; for rcfile in ${ZDOTDIR:-$HOME}/.zprezto/runcoms/^README.md(.N); do ln -s $rcfile ${ZDOTDIR:-$HOME}/.${rcfile:t}; done"]
+COPY zprezto/ /root/.zprezto/
+COPY .tmux.conf .p10k.zsh .gdbinit .ripgreprc /root/
+
+CMD ["/bin/zsh"]

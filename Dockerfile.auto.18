@@ -1,7 +1,7 @@
 ARG PWNBOX_BASE=18
 FROM kevin2s/pwnbox:base.${PWNBOX_BASE}
 
-RUN echo 'y\ny' | unminimize; apt-get update \
+RUN echo 'y\ny' | unminimize && apt-get update \
     # Ubuntu xenial has no `unminimize`
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     tree zsh tmux man manpages-posix less netcat ccache software-properties-common \
