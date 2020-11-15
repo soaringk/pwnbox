@@ -44,7 +44,8 @@ zstyle ':prezto:load' pmodule \
   'autosuggestions' \
   'git' \
   'python' \
-  'fzf'
+  'fzf' \
+  'tmux'
 
 #
 # Autosuggestions
