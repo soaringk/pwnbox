@@ -14,7 +14,7 @@ function bip() {
 # Delete (one or multiple) selected application(s)
 # mnemonic [B]rew [C]lean [P]lugin (e.g. uninstall)
 function bxp() {
-    local uninst=$(brew leaves | fzf -m -q "$1" --preview 'brew info {}')
+    local uninst=$(brew list --formula | fzf -m -q "$1" --preview 'brew info {}')
 
   if [[ $uninst ]]; then
     for token in $(echo $uninst); do
@@ -52,7 +52,7 @@ function bcip() {
 # using brew list as input source (all brew cask installed applications)
 # and display a info quickview window for the currently marked application
 function bcxp() {
-    local uninst=$(brew cask list | fzf -m -q "$1" --preview 'brew cask info {}')
+    local uninst=$(brew list --cask | fzf -m -q "$1" --preview 'brew cask info {}')
 
   if [ $uninst ]; then
     for token in $(echo $uninst); do

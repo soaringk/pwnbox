@@ -39,20 +39,15 @@ __fzf_prog() {
 
 
 # Use fd or ripgrep or ag if available
-if (( $+commands[rg] )); then
-  export FZF_DEFAULT_COMMAND="rg --files --hidden -g '!{.git,node_modules,Library}' 2> /dev/null"
-  _fzf_compgen_path() {
-    rg --files --hidden -g '!{.git,node_modules,Library}/*' "$1" 2>/dev/null
-  }
-elif (( $+commands[fd] )); then
-  export FZF_DEFAULT_COMMAND="fd -H -E .git -E node_modules -E Library"
+if (( $+commands[fd] )); then
+  export FZF_DEFAULT_COMMAND="fd -HI -E .git -E node_modules -E Library"
   _fzf_compgen_path() {
     fd -H -E .git -E node_modules "$1"
   }
-elif (( $+commands[ag] )); then
-  export FZF_DEFAULT_COMMAND="ag -g ''"
+elif (( $+commands[rg] )); then
+  export FZF_DEFAULT_COMMAND="rg --files --hidden -g '!{.git,node_modules,Library}' 2> /dev/null"
   _fzf_compgen_path() {
-    ag -g '' "$1"
+    rg --files --hidden -g '!{.git,node_modules,Library}/*' "$1" 2>/dev/null
   }
 fi
 
