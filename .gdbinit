@@ -36,7 +36,7 @@ import splitmind
   .above(display="stack", size="85%")
   .above(display="legend", size="20")
   .show("regs", on="legend")
-  .below(of="backtrace", cmd="ipython", size="40%")
+  .below(of="backtrace", cmd="ipython3", size="40%")
 ).build(nobanner=True)
 end
 set context-code-lines 15

@@ -69,4 +69,4 @@ export npm_config_cache="~/.cache/npm"
 export NODE_REPL_HISTORY="~/.cache/node_repl_history"
 
 # config
-export RIPGREP_CONFIG_PATH="$HOME/.config/.ripgreprc"
+export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"

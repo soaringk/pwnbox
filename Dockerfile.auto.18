@@ -13,10 +13,13 @@ RUN echo 'y\ny' | unminimize && apt-get update \
     && ~/.fzf/install --all \
     && ln -s /root/.fzf/bin/fzf /usr/local/bin \
     && ln -s /root/.fzf/bin/fzf-tmux /usr/local/bin \
-    && curl -fLo /tmp/fd_8.1.1_amd64.deb https://github.com/sharkdp/fd/releases/download/v8.1.1/fd_8.1.1_amd64.deb \
-    && dpkg -i /tmp/fd_8.1.1_amd64.deb \
-    && curl -fLo /tmp/ripgrep_12.1.1_amd64.deb https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb \
-    && dpkg -i /tmp/ripgrep_12.1.1_amd64.deb \
+    && curl -fLo /tmp/fd_amd64.deb https://github.com/sharkdp/fd/releases/download/v8.2.0/fd_8.2.0_amd64.deb \
+    && dpkg -i /tmp/fd_amd64.deb \
+    && curl -fLo /tmp/ripgrep_amd64.deb https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb \
+    && dpkg -i /tmp/ripgrep_amd64.deb \
+    && apt-get install -y pandoc poppler-utils ffmpeg \
+    && curl -fLo /tmp/ripgrep_all.tar.gz https://github.com/phiresky/ripgrep-all/releases/download/v0.9.6/ripgrep_all-v0.9.6-x86_64-unknown-linux-musl.tar.gz \
+    && cd /tmp && tar --strip-components=1 -xf /tmp/ripgrep_all.tar.gz && cp rga* /usr/local/bin \
     # other python panckages
     && python3 -m pip install -U --no-cache-dir pylint ipython yapf rope \
     && python2 -m pip install -U --no-cache-dir pylint ipython yapf rope \
