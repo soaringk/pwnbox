@@ -2,7 +2,7 @@
 # using "brew search" as source input
 # mnemonic [B]rew [I]nstall [P]lugin
 function bip() {
-    local inst=$(brew search | fzf -m -q "$1" --preview 'brew info {}')
+    local inst=$(brew search --formula | fzf -m -q "$1" --preview 'brew info {}')
 
   if [[ $inst ]]; then
     for token in $(echo $inst); do
@@ -27,14 +27,14 @@ function bxp() {
 # using brew cask search as input source
 # and display a info quickview window for the currently marked application
 function bcip() {
-  local inst=$(brew search --casks | fzf -m -q "$1" --preview 'brew cask info {}')
+  local inst=$(brew search --casks | fzf -m -q "$1" --preview 'brew info --cask {}')
 
   if [ $inst ]; then
     read "input?(i)nstall or open the (h)omepage of $(echo $inst | tr '\n' ' '): "
     case "$input" in
       [Ii]* )
         for token in $(echo $inst); do
-          brew cask install $token
+          brew install --cask $token
         done
         ;;
       [Hh]* )
@@ -52,11 +52,11 @@ function bcip() {
 # using brew list as input source (all brew cask installed applications)
 # and display a info quickview window for the currently marked application
 function bcxp() {
-    local uninst=$(brew list --cask | fzf -m -q "$1" --preview 'brew cask info {}')
+    local uninst=$(brew list --cask | fzf -m -q "$1" --preview 'brew info --cask {}')
 
   if [ $uninst ]; then
     for token in $(echo $uninst); do
-      brew cask uninstall $token
+      brew uninstall --cask $token
     done
   fi
 }
