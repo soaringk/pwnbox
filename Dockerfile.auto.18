@@ -30,6 +30,12 @@ RUN echo 'y\ny' | unminimize && apt-get update \
     && cd /tmp/patchelf && ./bootstrap.sh && ./configure \
     && make > /dev/null && make check \
     && make install \
+    # gcc-8 (C++17 support)
+    # to config which gcc to use, run: update-alternatives --config gcc
+    # https://askubuntu.com/questions/1028601/install-gcc-8-only-on-ubuntu-18-04/1028656#1028656 for more information
+    && apt-get install g++-8 \
+    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 700 --slave /usr/bin/g++ g++ /usr/bin/g++-7 \
+    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 800 --slave /usr/bin/g++ g++ /usr/bin/g++-8 \
     # vim
     && add-apt-repository ppa:jonathonf/vim \
     && apt-get update && apt-get install -y vim \

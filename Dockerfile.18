@@ -24,7 +24,7 @@ RUN dpkg --add-architecture i386 && apt-get update \
     # pwndbg & gef
     && git clone --depth 1 https://github.com/pwndbg/pwndbg.git /opt/pwndbg \
     && cd /opt/pwndbg && ./setup.sh \
-    && curl -fLo /opt/gef.py https://tinyurl.com/gef-master \
+    && curl -fLo /opt/gef.py http://gef.blah.cat/py \
     && echo "# source /opt/gef.py" >> ~/.gdbinit \
     # pwntools, ropgadget
     # remove duplicate unicorn==1.0.1
