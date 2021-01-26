@@ -22,7 +22,6 @@ RUN echo 'y\ny' | unminimize && apt-get update \
     && cd /tmp && tar --strip-components=1 -xf /tmp/ripgrep_all.tar.gz && cp rga* /usr/local/bin \
     # other python panckages
     && python3 -m pip install -U --no-cache-dir pylint ipython yapf rope \
-    && python2 -m pip install -U --no-cache-dir pylint ipython yapf rope \
     # split view of pwndbg
     && git clone --depth 1 https://github.com/jerdna-regeiz/splitmind /opt/splitmind \
     # patchelf

@@ -27,9 +27,6 @@ RUN dpkg --add-architecture i386 && apt-get update \
     && curl -fLo /opt/gef.py http://gef.blah.cat/py \
     && echo "# source /opt/gef.py" >> ~/.gdbinit \
     # pwntools, ropgadget
-    # remove duplicate unicorn==1.0.1
-    && python3 -m pip uninstall -y unicorn \
-    && python2 -m pip uninstall -y unicorn \
     && python3 -m pip install -U --no-cache-dir pwntools ropgadget \
     && python2 -m pip install -U --no-cache-dir pwntools ropgadget \
     && gem install one_gadget seccomp-tools \
