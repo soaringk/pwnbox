@@ -1,7 +1,7 @@
 FROM ubuntu:focal
 
 # install necessary packages
-RUN dpkg --add-architecture i386 && apt-get update \
+RUN dpkg --add-architecture i386 && apt-get update && apt-get dist-upgrade -y \
     && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
     # building tools
     build-essential binutils coreutils cmake gcc gcc-multilib bison flex upx-ucl \
